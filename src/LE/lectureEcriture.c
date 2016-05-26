@@ -1,5 +1,13 @@
+#include "lectureEcriture.h"
+#include "sdata.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 define taille_nom_fichier 256
+FILE * fichierACompresser;
+FILE * fichierTemporaire;
+FILE * fichierCompresse;
+FILE * fichierADecompresser;
 
 void lireFichier(donnees * d)
 {
@@ -15,7 +23,7 @@ void lireFichier(donnees * d)
 
     if (fichier != NULL)
     {
-       // lire et écrire dans le fichier
+       // lire et ï¿½crire dans le fichier
         
         
         
@@ -28,5 +36,18 @@ void lireFichier(donnees * d)
     }
 }
 
-
-
+void realisationCompression(Arbre * arbre)
+{
+}
+int lectureOctet(FILE * fichier, char* symbole)
+{
+}
+int lectureBit(FILE * fichier, char* symbole)
+{
+}
+int ecritureOctet(FILE * fichier, char* symbole)
+{
+}
+int ecritureBit(FILE * fichier, char* symbole)
+{
+}
