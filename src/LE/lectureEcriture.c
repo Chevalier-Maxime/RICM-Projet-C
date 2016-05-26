@@ -1,5 +1,12 @@
 #include "lectureEcriture.h"
 #include "sdata.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+FILE * fichierACompresser;
+FILE * fichierTemporaire;
+FILE * fichierCompresse;
+FILE * fichierADecompresser;
 
 void lireFichier(donnees * d)
 {
@@ -24,9 +31,11 @@ void lireFichier(donnees * d)
 
 void realisationCompression(Arbre * arbre)
 {
+	//#TODO
 }
 int lectureOctet(FILE * fichier, char* symbole)
 {
+	
 }
 int lectureBit(FILE * fichier, char* symbole)
 {
