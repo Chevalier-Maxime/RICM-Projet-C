@@ -1,15 +1,29 @@
 #include "lectureEcriture.h"
 #include "sdata.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+define taille_nom_fichier 256
+FILE * fichierACompresser;
+FILE * fichierTemporaire;
+FILE * fichierCompresse;
+FILE * fichierADecompresser;
 
 void lireFichier(donnees * d)
 {
     FILE* fichier = NULL;
 
+	//Demander chemin d'acces
+	 printf("Quel est votre nom de fichier?  ");
+		scanf("%s",nomFichier);
+	//tester si il est valide
+	//si non, redemander
+	
     fichier = fopen("sdata.h", "r+");
 
     if (fichier != NULL)
     {
-       // lire et écrire dans le fichier
+       // lire et ï¿½crire dans le fichier
         
         
         
