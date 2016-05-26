@@ -29,5 +29,6 @@ union octet{
 }
 
 void creerArbreBinaire(int hauteur, Arbre * arbre);
-int rechercheArbreBinaire(Arbre * arbre, char symbole);
+int nombreOccurance(Arbre * arbre, char symbole);
+int estFeuille(Arbre * arbre);
 
