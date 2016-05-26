@@ -1,10 +1,16 @@
-#include "lectureEcriture.h"
-#include "sdata.h"
+
+define taille_nom_fichier 256
 
 void lireFichier(donnees * d)
 {
     FILE* fichier = NULL;
 
+	//Demander chemin d'acces
+	 printf("Quel est votre nom de fichier?  ");
+		scanf("%s",nomFichier);
+	//tester si il est valide
+	//si non, redemander
+	
     fichier = fopen("sdata.h", "r+");
 
     if (fichier != NULL)
@@ -22,18 +28,5 @@ void lireFichier(donnees * d)
     }
 }
 
-void realisationCompression(Arbre * arbre)
-{
-}
-int lectureOctet(FILE * fichier, char* symbole)
-{
-}
-int lectureBit(FILE * fichier, char* symbole)
-{
-}
-int ecritureOctet(FILE * fichier, char* symbole)
-{
-}
-int ecritureBit(FILE * fichier, char* symbole)
-{
-}
+
+
