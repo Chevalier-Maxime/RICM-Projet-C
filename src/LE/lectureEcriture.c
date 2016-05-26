@@ -1,10 +1,9 @@
 #include "lectureEcriture.h"
-#include "sdata.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-define taille_nom_fichier 256
-FILE * fichierACompresser;
+#define taille_nom_fichier 256
+FILE * fichierACompresser; 
 FILE * fichierTemporaire;
 FILE * fichierCompresse;
 FILE * fichierADecompresser;
@@ -36,18 +35,73 @@ void lireFichier(donnees * d)
     }
 }
 
-void realisationCompression(Arbre * arbre)
+void realisationCompression(ArbreSymbole * arbre)
 {
 }
-int lectureOctet(FILE * fichier, char* symbole)
+
+/**
+ * Permet de lire octet par octet dans un fichier
+ * @param fichier : Le fichier à lire, doit être ouvert
+ * @param symbole : l'octet lu
+ * @return : 1 si la lecture s'est bien passé, 0 sinon
+ **/
+int lectureOctet(FILE * fichier, unsigned char* symbole) //#TODO Je suis pas sur que ce soit utile...
 {
+	if(fichier==NULL) return 0;
+	
+	int caractereCourant = fgetc(fichier);
+	return caractereCourant;
 }
-int lectureBit(FILE * fichier, char* symbole)
+
+
+typedef struct dernierOctet{
+	unsigned char dernierOctetLu;
+	int positionCourante;
+} dernierOctet;
+
+dernierOctet * dL;
+unsigned char MASK = 1;
+
+/**
+ * Permet de lire bit par bit dans un fichier
+ * @param fichier le fichier ouvert dans lequel lire
+ * @param symbole le digit lu mis dans un char.
+ * @return : 1 si la lecture s'est bien passé, 0 sinon
+ **/ 
+int lectureBit(FILE * fichier, unsigned char* symbole)
 {
+	if(fichier==NULL) return 0;
+	if(dL==NULL) dL = malloc(sizeof(dernierOctet));
+	if(dL->positionCourante==8)
+	{
+		dL->dernierOctetLu = fgetc(fichier);
+		if(dL->dernierOctetLu==EOF) return 0;
+		dL->positionCourante=0;
+	}
+	*symbole = ((dL->dernierOctetLu)&(MASK<<dL->positionCourante))>>dL->positionCourante;
+	dL->positionCourante+=1;
+	return 1;
 }
-int ecritureOctet(FILE * fichier, char* symbole)
+
+/**
+ * Permet d'ecrire octet par octet dans un fichier
+ * @param fichier : Le fichier où écrire, doit être ouvert
+ * @param symbole : l'octet à écrire
+ * @return : 1 si l'écriture s'est bien passé, 0 sinon
+ **/
+int ecritureOctet(FILE * fichier, unsigned char* symbole)
 {
+	
+	return 0;	
 }
-int ecritureBit(FILE * fichier, char* symbole)
+
+/**
+ * Permet d'ecrire octet par octet dans un fichier
+ * @param fichier : Le fichier où écrire, doit être ouvert
+ * @param symbole : le digit à écrire
+ * @return : 1 si l'écriture s'est bien passé, 0 sinon
+ **/
+int ecritureBit(FILE * fichier, unsigned char* symbole)
 {
+	return 0;
 }
