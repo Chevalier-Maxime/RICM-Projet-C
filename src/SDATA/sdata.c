@@ -4,7 +4,7 @@ void creerArbreBinaire(int hauteur, Arbre * arbre)
 {
 	if(hauteur ==0){
 		arbre->valeur = 0;
-		arbre->filsDroi = NULL;
+		arbre->filsDroit = NULL;
 		arbre->filsGauche = NULL;
 		return;
 	}
