@@ -45,4 +45,17 @@ int estFeuille(Arbre * arbre)
 	return 0;
 }
 
-
+Arbre * ajouterNoeudParent(Arbre * fils, char direction)
+{
+	if(direction == 'd' || direction =='D'){
+		Arbre * arbre = malloc(sizeof(Arbre));
+		arbre->filsDroit = fils;
+	}
+	else if (direction == 'g' || direction =='G'){
+		Arbre * arbre = malloc(sizeof(Arbre));
+		arbre->filsGauche = fils;
+	}
+	else return NULL;
+	
+	return arbre;
+}

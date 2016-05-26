@@ -31,4 +31,5 @@ union octet{
 void creerArbreBinaire(int hauteur, Arbre * arbre);
 int nombreOccurance(Arbre * arbre, char symbole);
 int estFeuille(Arbre * arbre);
+Arbre * ajouterNoeudParent(Arbre * fils, char dirrection); 
 
