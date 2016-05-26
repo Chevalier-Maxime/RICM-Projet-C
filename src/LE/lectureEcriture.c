@@ -8,32 +8,32 @@ FILE * fichierTemporaire;
 FILE * fichierCompresse;
 FILE * fichierADecompresser;
 
-void lireFichier(donnees * d)
-{
-    FILE* fichier = NULL;
+//~ void lireFichier(donnees * d)
+//~ {
+    //~ FILE* fichier = NULL;
 
-	//Demander chemin d'acces
-	 printf("Quel est votre nom de fichier?  ");
-		scanf("%s",nomFichier);
-	//tester si il est valide
-	//si non, redemander
+	//~ //Demander chemin d'acces
+	 //~ printf("Quel est votre nom de fichier?  ");
+		//~ scanf("%s",nomFichier);
+	//~ //tester si il est valide
+	//~ //si non, redemander
 	
-    fichier = fopen("sdata.h", "r+");
+    //~ fichier = fopen("sdata.h", "r+");
 
-    if (fichier != NULL)
-    {
-       // lire et ï¿½crire dans le fichier
+    //~ if (fichier != NULL)
+    //~ {
+       //~ // lire et ï¿½crire dans le fichier
         
         
         
-        fclose(fichier); 
-    }
-    else
-    {
+        //~ fclose(fichier); 
+    //~ }
+    //~ else
+    //~ {
         
-        printf("Impossible d'ouvrir le fichier ");
-    }
-}
+        //~ printf("Impossible d'ouvrir le fichier ");
+    //~ }
+//~ }
 
 void realisationCompression(ArbreSymbole * arbre)
 {
@@ -50,12 +50,13 @@ int lectureOctet(FILE * fichier, unsigned char* symbole) //#TODO Je suis pas sur
 	if(fichier==NULL) return 0;
 	
 	int caractereCourant = fgetc(fichier);
+	*symbole = caractereCourant;
 	return caractereCourant;
 }
 
 
 typedef struct dernierOctet{
-	unsigned char dernierOctetLu;
+	char dernierOctetLu;
 	int positionCourante;
 } dernierOctet;
 
@@ -71,7 +72,11 @@ unsigned char MASK = 1;
 int lectureBit(FILE * fichier, unsigned char* symbole)
 {
 	if(fichier==NULL) return 0;
-	if(dL==NULL) dL = malloc(sizeof(dernierOctet));
+	if(dL==NULL)
+	{
+		 dL = malloc(sizeof(dernierOctet));
+		 dL->positionCourante = 8;
+	}
 	if(dL->positionCourante==8)
 	{
 		dL->dernierOctetLu = fgetc(fichier);
@@ -95,6 +100,8 @@ int ecritureOctet(FILE * fichier, unsigned char* symbole)
 	return 0;	
 }
 
+
+dernierOctet * dE;
 /**
  * Permet d'ecrire octet par octet dans un fichier
  * @param fichier : Le fichier où écrire, doit être ouvert
@@ -103,5 +110,42 @@ int ecritureOctet(FILE * fichier, unsigned char* symbole)
  **/
 int ecritureBit(FILE * fichier, unsigned char* symbole)
 {
-	return 0;
+	if(fichier==NULL) return 0;
+	if(dE==NULL)
+	{
+		 dE = malloc(sizeof(dernierOctet));
+		 dE->positionCourante = 0;
+		 dE->positionCourante = 0;
+	}
+	if(dE->positionCourante==8)
+	{
+		int resultat = fputs(&(dE->dernierOctetLu),fichier);
+		if(resultat == EOF) return 0;
+		dE->positionCourante=0;
+		dE->positionCourante = 0;
+	}
+	dE->dernierOctetLu = ((*symbole & MASK)<<dE->positionCourante) | dE->dernierOctetLu;
+	dE->positionCourante++;
+	return 1;
+}
+
+int main(void)
+{
+	//Test lecture
+	FILE * fichier;
+	char chemin[] = "./testLecture.txt";
+	unsigned char caractereActuel;
+	int a;
+	fichier = fopen(chemin, "r+");
+	if (fichier != NULL)
+    {
+        // Boucle de lecture des caractères un à un
+        do
+        {
+             a = lectureBit(fichier, &caractereActuel); // On lit le caractère
+            printf("%c", caractereActuel); // On l'affiche
+        } while (a != EOF); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
+        fclose(fichier);
+    }
+    return 0;
 }
