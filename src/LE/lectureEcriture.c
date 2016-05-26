@@ -1,3 +1,6 @@
+#include "lectureEcriture.h"
+#include "sdata.h"
+
 void lireFichier(donnees * d)
 {
     FILE* fichier = NULL;
@@ -17,4 +20,20 @@ void lireFichier(donnees * d)
         
         printf("Impossible d'ouvrir le fichier ");
     }
+}
+
+void realisationCompression(Arbre * arbre)
+{
+}
+int lectureOctet(FILE * fichier, char* symbole)
+{
+}
+int lectureBit(FILE * fichier, char* symbole)
+{
+}
+int ecritureOctet(FILE * fichier, char* symbole)
+{
+}
+int ecritureBit(FILE * fichier, char* symbole)
+{
 }
