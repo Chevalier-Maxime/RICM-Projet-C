@@ -144,7 +144,7 @@ int ecritureBit(FILE * fichier, unsigned char* symbole)
 		dE->dernierOctetLu = 0x0;
 		dE->taille = 0;
 	}
-	dE->dernierOctetLu = ((*symbole & (MASK<<dE->positionCourante)) | dE->dernierOctetLu); //-----------Modif /!\ : ((*symbole & MASK)<<dE->positionCourante) | dE->dernierOctetLu
+	dE->dernierOctetLu = ((*symbole & MASK)<<dE->positionCourante) | dE->dernierOctetLu; //-----------Modif /!\ : ((*symbole & MASK)<<dE->positionCourante) | dE->dernierOctetLu
 	dE->positionCourante++;
 	dE->taille++;
 	return 1;
@@ -173,7 +173,7 @@ int realiserCompressionASCII(ArbreSymbole * a, donnees * d)
 		c = res;
 		sommeEcriture+=transcoderASCII(c,a);
 	}
-	if (sommeEcriture%8==0) pousserEcritureBit(fichierCompresse);
+	if (sommeEcriture%8!=0) pousserEcritureBit(fichierCompresse);
 	return sommeEcriture % 8; //padding ajoute a la fin. On le sait que maintenant donc il va falloir modifier l'entete à la fin pour ecrire la taille du pading...
 }
 
@@ -205,10 +205,10 @@ int transcoderASCII(char c, ArbreSymbole * a)
 	if (estFeuille(noeudCourant)){
 		int i;
 		if (noeudCourant->taille > 7) printf("lectureEcriture.c : taille symbole trop importante pour un char.");
-		for (i = noeudCourant->taille; i <= 0;i++)
+		for (i = noeudCourant->taille-1; i >=0 ;i--)
 		{
 			bit = ((MASK << i)&noeudCourant->valeur) >> i;
-			ecritureBit(fichierCompresse, bit);
+			ecritureBit(fichierCompresse, &bit);
 		}
 	}
 	else

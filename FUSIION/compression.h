@@ -64,5 +64,4 @@ ArbreSymbole* Merge(donnees d, TabHuff* TH);
 
 ArbreSymbole * Compression(donnees d);
 
-int main(void);
 #endif // !COMPRESSION_H
