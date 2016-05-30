@@ -71,4 +71,5 @@ void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole);
 ArbreSymbole * ajout2ArbresS(ArbreSymbole * a, ArbreSymbole * a2);
 
 void print_Abr(ArbreSymbole* a, int l);
+void print_AbrE(ArbreEntier* a, int l);
 #endif // SDATA_H

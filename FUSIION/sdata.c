@@ -177,3 +177,15 @@ void print_Abr(ArbreSymbole* a, int l) {
 	}
 	return;
 }
+
+void print_AbrE(ArbreEntier* a, int l) {
+	int j;
+	if (a != NULL) {
+		print_AbrE(a->filsDroit, l + 1);
+		for (j = 0; j < l; j++)
+			printf("   ");
+		printf(" %d, %d \n", a->valeur, a->taille);
+		print_AbrE(a->filsGauche, l + 1);
+	}
+	return;
+}

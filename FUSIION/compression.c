@@ -140,7 +140,6 @@ ArbreEntier* ConversionArbre(ArbreSymbole * a) {
 	for (i = 0; i<HS.Taille; i++) {
 		RemplitArbreHuffman(aa, HS.S[i], HS.H[i], HS.T[i]);
 	}
-	//print_Abr(aa,0);
 
 	return aa;
 }
@@ -151,8 +150,7 @@ void AjoutTailleTH(unsigned char Symbole, TabHuff* TH, int Taille) {
 		i--;
 	while (i >= 0 && TH->Symbole[i] != Symbole)
 		i--;
-	if (i != 0)
-		TH->TailleS[i] = Taille;
+	TH->TailleS[i] = Taille;
 }
 
 
@@ -190,7 +188,7 @@ ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 		Arb.Taille--;
 
 		i = 1;
-		while (i<Arb.Taille-1 && (Arb.a[0]->valeur >= Arb.a[i]->valeur + Arb.a[i + 1]->valeur)) {
+		while (i<Arb.Taille-1 && (Arb.a[0]->occurrence >= Arb.a[i]->valeur + Arb.a[i + 1]->valeur)) {
 			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i + 1]);
 			i++;
 			for (j = i; j<Arb.Taille; j++)
@@ -211,8 +209,15 @@ ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 void InitPM(TabMerge* TM) {
 	int i;
 	for (i = 0; i<2048; i++) {
-		TM->Package[i] = NULL;
-		TM->Merge[i] = NULL;
+		liste* lp = malloc(sizeof(liste*));
+		liste* lm = malloc(sizeof(liste*));
+		TM->Package[i] = lp;
+		TM->Package[i]->valeur = 0;
+		TM->Package[i]->Suivant = NULL;
+		TM->Merge[i] = lm;
+		TM->Merge[i]->valeur = 0;
+		TM->Merge[i]->Suivant = NULL;
+
 		TM->PoidsP[i] = 0;
 		TM->PoidsM[i] = 0;
 	}
@@ -236,7 +241,8 @@ void MergeAjout(TabHuff* TH, TabMerge* TM) {
 	int i = 0, j = 0, k;
 	TM->TailleM = TM->TailleP + TH->Taille;
 	for(k=0; k<TM->TailleM; k++){
-		TM->Merge[k]=NULL;
+		TM->Merge[k]->Suivant=NULL;
+		TM->Merge[k]->valeur=0;
 		TM->PoidsM[k]=0;
 	}
 	for (k = 0; k<TM->TailleM; k++) {
@@ -269,22 +275,19 @@ ArbreSymbole* ConstruireArbre(TabHuff* TH, int Prof, int Indice) {
 }
 
 ArbreSymbole* ArbreMerge(TabHuff* TH) {
-	int Prof = 0;
-	return ConstruireArbre(TH, Prof, TH->Taille / 2);
+	return ConstruireArbre(TH, 0, TH->Taille / 2);
 }
 
 ArbreEntier* Merge(donnees d, TabHuff* TH) {
 	TabMerge TM;
 	liste* L;
 	int i, k;
-
-
 	InitPM(&TM);
 	for (k = 0; k<d.Lmax; k++) {
 		MergeAjout(TH, &TM);
 		i = 0;
 		TM.TailleP = 0;
-		while (i<TH->Taille - 2) {
+		while (i<TM.TailleM - 2) {
 			TM.Package[TM.TailleP] = Concat2Listes(TM.Merge[i], TM.Merge[i + 1]);
 			TM.PoidsP[TM.TailleP] = TM.PoidsM[i] + TM.PoidsM[i + 1];
 			TM.TailleP++;
@@ -308,9 +311,8 @@ ArbreEntier* Merge(donnees d, TabHuff* TH) {
 }
 
 
-ArbreEntier * Compression(donnees d){
+ArbreEntier * Compression(donnees d, TabHuff Tab){
 	ArbreEntier* a;
-	TabHuff Tab;
 
 	TriArbreTableau(d.arbre, &Tab);
 
