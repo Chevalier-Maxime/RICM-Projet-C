@@ -6,7 +6,7 @@
 
 ArbreSymbole* Decompression(unsigned char TS[256], int TT[256], int nbSymboles){
 	TabArb Arb;
-	int i, j;
+	int i, j, int;
 
 	for (j = 0; j<nbSymboles; j++) {
 		Arb.a[j] = creerArbreSymboleVide(TS[j], TT[j]);
@@ -22,8 +22,10 @@ ArbreSymbole* Decompression(unsigned char TS[256], int TT[256], int nbSymboles){
 		Arb.Taille--;
 
 		i = 1;
-		while (i<Arb.Taille-1 && (Arb.a[0]->occurrence <= Arb.a[i]->occurrence + Arb.a[i + 1]->occurrence)) {
-			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i + 1]);
+		while (i<Arb.Taille-1 && (2*Arb.a[0]->occurrence == Arb.a[i]->occurrence + Arb.a[i+1]->occurrence)) {
+			Prof = Arb.a[i]->occurrence;
+			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i+1]);
+			Arb.a[i]->occurrence = Prof-1;
 			i++;
 			for (j = i; j<Arb.Taille; j++)
 				Arb.a[j] = Arb.a[j+1];
