@@ -330,20 +330,3 @@ ArbreEntier * Compression(donnees d, TabHuff * Tab){
 
 }
 
-#define N 257
-void initialiserLongueur(int * Longueur, ArbreEntier * huffmanTransforme)
-{
-	if (estFeuilleEntier(huffmanTransforme))
-	{
-
-		return;
-	}
-
-}
-
-ArbreEntier * creerArbreCanonique(donnees d, ArbreEntier * huffmanTransforme)
-{
-	int Longueur[N];
-	initialiserLongueur(Longueur, huffmanTransforme);
-
-}
