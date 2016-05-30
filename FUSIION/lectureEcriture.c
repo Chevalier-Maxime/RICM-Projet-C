@@ -157,13 +157,13 @@ int pousserEcritureBit(FILE * fichier)
 	return fwrite(&(dE->dernierOctetLu), sizeof(char), 1, fichier);
 }
 
-int realiserCompressionASCII(ArbreEntier * a, donnees * d)
+int realiserCompressionASCII(ArbreEntier * a, donnees * d, entete * e)
 {
 	fichierCompresse=fopen(NOM_FICHIER_COMP, "w+b");
 	fclose(fichierACompresser);
 	fichierACompresser = fopen(nomFichierACompresser, "r+b");
 	//Ajouter entete
-	//#TODO
+	//#TODO -------------------------------------------------------------------------------------------------------------
 	int res,i;
 	unsigned long int sommeEcriture = 0;
 	char c;
@@ -262,16 +262,26 @@ int main(void)
 	freopen("stderr.txt", "w", stdout);
 
 	donnees * d = malloc(sizeof(donnees));
+	TabHuff * tableauHuffman = malloc(sizeof(TabHuff));
 	d->Lmax = 8;
 	d->nbSymboles = 0;
 	d->arbre = creerArbreSymboleVide(0,0);
 	//Met des 1 dans les noeuds, mettre des 0 --> demander HUGO
 	creerArbreBinaire(8, d->arbre);
 	lireFichier(d);
-	ArbreEntier * a = Compression(*d);
+	ArbreEntier * a = Compression(*d, tableauHuffman);
 	//print_Abr(a, 0);
+	
+	entete * e = malloc(sizeof(entete));
+	e->nbSymboles = d->nbSymboles;
+	int i;
+	for ( i = 0; i < 256; i++)
+	{
+		e->Symbole[i] = tableauHuffman->Symbole[i];
+		e->TailleS[i] = tableauHuffman->TailleS[i];
+	}
 
-	realiserCompressionASCII(a, d);
+	int padding = realiserCompressionASCII(a, d, e);
 	
     return 0;
 }

@@ -315,12 +315,12 @@ ArbreEntier* Merge(donnees d, TabHuff* TH) {
 }
 
 
-ArbreEntier * Compression(donnees d, TabHuff Tab){
+ArbreEntier * Compression(donnees d, TabHuff * Tab){
 	ArbreEntier* a;
 
-	TriArbreTableau(d.arbre, &Tab);
+	TriArbreTableau(d.arbre, Tab);
 
-	a = Huffman(d, &Tab);
+	a = Huffman(d, Tab);
 
 	//if(TestMerge(&Tab,d))
 		//a = Merge(d, &Tab);

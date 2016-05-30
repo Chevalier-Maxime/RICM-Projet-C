@@ -62,6 +62,6 @@ ArbreSymbole* ArbreMerge(TabHuff* TH);
 
 ArbreEntier* Merge(donnees d, TabHuff* TH);
 
-ArbreEntier * Compression(donnees d, TabHuff Tab);
+ArbreEntier * Compression(donnees d, TabHuff * Tab);
 
 #endif // !COMPRESSION_H
