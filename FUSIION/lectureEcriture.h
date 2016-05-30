@@ -9,7 +9,7 @@
 	extern FILE * fichierADecompresser;
 	
 	void lireFichier(donnees * d);
-	void realisationCompression(ArbreSymbole * arbre);
+	int realiserCompressionASCII(ArbreEntier * a, donnees * d, entete * e);
 	int lectureOctet(FILE * fichier, unsigned char* symbole);
 	int lectureBit(FILE * fichier, unsigned char* symbole);
 	int ecritureOctet(FILE * fichier, unsigned char* symbole);

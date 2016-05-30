@@ -37,12 +37,13 @@ typedef struct liste
 
 
 
-typedef struct entete
+typedef struct entete //MODIFICATION TAB A METTRE ICI ET PAS DANS DONNEE
 {
 	int nbSymboles;
-	ArbreEntier* arbreCanonique;
 	int nbPadding;
 	int tailleEntete;
+	int TailleS[256];
+	unsigned char Symbole[256];
 } entete;
 
 union octet{
