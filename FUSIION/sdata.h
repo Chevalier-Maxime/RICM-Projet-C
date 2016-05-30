@@ -34,6 +34,8 @@ typedef struct liste
 	char valeur;
 } liste;
 
+
+
 typedef struct entete
 {
 	int nbSymboles;

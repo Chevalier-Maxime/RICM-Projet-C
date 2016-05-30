@@ -268,9 +268,6 @@ int main(void)
 	//Met des 1 dans les noeuds, mettre des 0 --> demander HUGO
 	creerArbreBinaire(8, d->arbre);
 	lireFichier(d);
-
-	
-
 	ArbreSymbole * a = Compression(*d);
 	print_Abr(a, 0);
 

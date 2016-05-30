@@ -349,3 +349,14 @@ ArbreSymbole * Compression(donnees d){
 
 	return 1;
 }*/
+
+#define N 257//(0x1 << 8)+1; //(2^8+1)
+void intitialiserLongueur(int * Longueur)
+{
+
+}
+ArbreSymbole * creerArbreCanonique(donnees * d, ArbreSymbole * huffman)
+{
+	int Longueur[N];
+	intitialiserLongueur(Longueur); 
+}
