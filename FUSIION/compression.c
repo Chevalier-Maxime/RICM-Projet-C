@@ -3,8 +3,6 @@
 #include "sdata.h"
 #include "compression.h"
 
-
-
 void initTableau(TabHuff* t) {
 	int i;
 	for (i = 0; i<256; i++) {
@@ -63,14 +61,11 @@ void TriArbreTableau(ArbreSymbole* a, TabHuff* t) {
 	}
 }
 
-int TestMerge(ArbreSymbole * a, donnees d) {
-	ArbreSymbole* aa = creerArbreSymboleVide(0, 0);
-	creerArbreBinaire(8, aa);
-	int LmaxOpti = 0;
-	while (!estFeuille(aa)) {
-		aa = aa->filsGauche;
-		LmaxOpti++;
-	}
+int TestMerge(TabHuff* TH, donnees d) {
+	int LmaxOpti = 0, i;
+	for(i=0;i<TH->Taille;i++)
+		if(TH->TailleS[i]>LmaxOpti)
+			LmaxOpti=TH->TailleS[i];
 	if (LmaxOpti <= d.Lmax)
 		return 0;
 	return 1;
@@ -92,9 +87,9 @@ void SymboleHuffman(ArbreSymbole* a, HuffSymb * HS, unsigned char Valeur) {
 	}
 }
 
-void RemplitArbreHuffman(ArbreSymbole* a, unsigned char symboleOrigine, unsigned char symboleHuffman, unsigned char Taille) {
-
-	ArbreSymbole * noeudCourant;
+void RemplitArbreHuffman(ArbreEntier* a, unsigned char symboleOrigine, int symboleHuffman, unsigned char Taille) {
+	
+	ArbreEntier * noeudCourant;
 	char bit, MASK = 0x1;
 	int bitCourant;
 	noeudCourant = a;
@@ -116,7 +111,7 @@ void RemplitArbreHuffman(ArbreSymbole* a, unsigned char symboleOrigine, unsigned
 			}
 		}
 	}
-	if (estFeuille(noeudCourant)) {
+	if (estFeuilleEntier(noeudCourant)) {
 		noeudCourant->valeur = symboleHuffman;
 		noeudCourant->taille = Taille;
 	}
@@ -126,8 +121,8 @@ void RemplitArbreHuffman(ArbreSymbole* a, unsigned char symboleOrigine, unsigned
 	}
 }
 
-ArbreSymbole* ConversionArbre(ArbreSymbole * a) {
-	ArbreSymbole* aa;
+ArbreEntier* ConversionArbre(ArbreSymbole * a) {
+	ArbreEntier* aa;
 	HuffSymb HS;
 	int i;
 	for (i = 0; i<256; i++) {
@@ -139,8 +134,8 @@ ArbreSymbole* ConversionArbre(ArbreSymbole * a) {
 
 	SymboleHuffman(a, &HS, 0);
 
-	aa = creerArbreSymboleVide(0, 0);
-	creerArbreBinaire(8, aa);
+	aa = creerArbreEntierVide(0,0);
+	creerArbreBinaireEntier(8, aa);
 
 	for (i = 0; i<HS.Taille; i++) {
 		RemplitArbreHuffman(aa, HS.S[i], HS.H[i], HS.T[i]);
@@ -177,10 +172,9 @@ void TailleSymbole(ArbreSymbole* a, int Taille, TabHuff* TH) {
 
 
 
-ArbreSymbole* Huffman(donnees d, TabHuff* Tab) {
+ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 	int i = 0, j;
 	TabArb Arb;
-	ArbreSymbole* AS;
 
 	for (j = 0; j<Tab->Taille; j++) {
 		Arb.a[j] = creerArbreSymboleVide(Tab->Symbole[j], Tab->Occurrence[j]);
@@ -196,23 +190,22 @@ ArbreSymbole* Huffman(donnees d, TabHuff* Tab) {
 		Arb.Taille--;
 
 		i = 1;
-		while (i<Arb.Taille - 1 && (Arb.a[0]->valeur >= Arb.a[i]->valeur + Arb.a[i + 1]->valeur)) {
+		while (i<Arb.Taille-1 && (Arb.a[0]->valeur >= Arb.a[i]->valeur + Arb.a[i + 1]->valeur)) {
 			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i + 1]);
 			i++;
 			for (j = i; j<Arb.Taille; j++)
-				Arb.a[j] = Arb.a[j + 1];
+				Arb.a[j] = Arb.a[j+1];
 			Arb.Taille--;
-
 		}
 	}
-	if (Arb.Taille != 0) {
-		AS = ajout2ArbresS(Arb.a[0], Arb.a[1]);
-		TailleSymbole(AS, 0, Tab);
-		print_Abr(AS, 0);
-		AS = ConversionArbre(AS);
-		return AS;
+	if(Arb.Taille!=0){
+		Arb.a[0] = ajout2ArbresS(Arb.a[0], Arb.a[1]);
+		TailleSymbole(Arb.a[0], 0, Tab);
+		//print_Abr(AS, 0);
+		return ConversionArbre(Arb.a[0]);
+;
 	}
-	printf("compression.c : Erreur Huffman : Pas de compression possible"); exit(0);
+	exit(0);
 }
 
 void InitPM(TabMerge* TM) {
@@ -240,15 +233,19 @@ liste* Concat2Listes(liste* L1, liste* L2) {
 }
 
 void MergeAjout(TabHuff* TH, TabMerge* TM) {
-	int i = 0, j = 0, k = 0;
+	int i = 0, j = 0, k;
 	TM->TailleM = TM->TailleP + TH->Taille;
+	for(k=0; k<TM->TailleM; k++){
+		TM->Merge[k]=NULL;
+		TM->PoidsM[k]=0;
+	}
 	for (k = 0; k<TM->TailleM; k++) {
 		if (i<TH->Taille && TH->Occurrence[i]<TM->PoidsP[j]) {
 			TM->Merge[k]->valeur = TH->Symbole[i];
 			TM->PoidsM[k] = TH->Occurrence[i];
 			i++;
 		}
-		else if (j<TM->TailleP) {
+		else if(j<TM->TailleP){
 			TM->Merge[k] = TM->Package[j];
 			TM->PoidsM[k] = TM->PoidsP[j];
 			j++;
@@ -266,21 +263,20 @@ void AjoutSymbole(unsigned char Symbole, TabHuff* TH) {
 
 ArbreSymbole* ConstruireArbre(TabHuff* TH, int Prof, int Indice) {
 	if (Prof == TH->Occurrence2[Indice])
-		return creerArbreSymboleVide(TH->Symbole[Indice], 0);
+		return creerArbreSymboleVide(TH->Symbole[Indice],0);
 	return ajout2ArbresS(ConstruireArbre(TH, Prof + 1, Indice / 2), ConstruireArbre(TH, Prof + 1, Indice + Indice / 2));
 
 }
 
 ArbreSymbole* ArbreMerge(TabHuff* TH) {
 	int Prof = 0;
-	ArbreSymbole* a = ConstruireArbre(TH, Prof, TH->Taille / 2);
-	return a;
+	return ConstruireArbre(TH, Prof, TH->Taille / 2);
 }
 
-ArbreSymbole* Merge(donnees d, TabHuff* TH) {
+ArbreEntier* Merge(donnees d, TabHuff* TH) {
 	TabMerge TM;
 	liste* L;
-	int i, j, k;
+	int i, k;
 
 
 	InitPM(&TM);
@@ -293,15 +289,6 @@ ArbreSymbole* Merge(donnees d, TabHuff* TH) {
 			TM.PoidsP[TM.TailleP] = TM.PoidsM[i] + TM.PoidsM[i + 1];
 			TM.TailleP++;
 			i += 2;
-			for (j = 0; j<TM.TailleP; j++) {
-				L = TM.Package[j];
-				if (L == NULL)
-					printf("Fuck\n");
-				while (L != NULL) {
-					printf("%c, ", L->valeur);
-					L = L->Suivant;
-				}
-			}
 		}
 
 	}
@@ -317,46 +304,22 @@ ArbreSymbole* Merge(donnees d, TabHuff* TH) {
 		}
 	}
 
-	return ArbreMerge(TH);
+	return ConversionArbre(ArbreMerge(TH));
 }
 
 
-ArbreSymbole * Compression(donnees d){
-	ArbreSymbole* a;
+ArbreEntier * Compression(donnees d){
+	ArbreEntier* a;
 	TabHuff Tab;
 
 	TriArbreTableau(d.arbre, &Tab);
 
 	a = Huffman(d, &Tab);
 
-	//if(TestMerge(a,d))
-		//printf("Merge à faire\n");
-	
-	//a = Merge(d, &Tab);
+	if(TestMerge(&Tab,d))
+		a = Merge(d, &Tab);
+	a = Merge(d, &Tab);
+
 	return a;
 
-}
-
-/*int main(void){
-	donnees d;
-	d.arbre = creerArbreEntierVide(0);
-	creerArbreBinaireEntier(8, d.arbre);
-
-	d.nbSymboles=45;
-	d.Lmax=10;
-
-	Compression(d);
-
-	return 1;
-}*/
-
-#define N 257//(0x1 << 8)+1; //(2^8+1)
-void intitialiserLongueur(int * Longueur)
-{
-
-}
-ArbreSymbole * creerArbreCanonique(donnees * d, ArbreSymbole * huffman)
-{
-	int Longueur[N];
-	intitialiserLongueur(Longueur); 
 }

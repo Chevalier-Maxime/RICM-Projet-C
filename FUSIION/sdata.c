@@ -15,8 +15,8 @@ int ioc(unsigned char c){
 void creerArbreBinaire(int hauteur, ArbreSymbole * arbre)
 {
 	if(hauteur ==0){
-		arbre->valeur = 0;
-		arbre->occurrence = 0;
+		arbre->valeur = 1;
+		arbre->occurrence = 1;
 		arbre->taille = 0;
 		arbre->filsDroit = NULL;
 		arbre->filsGauche = NULL;
@@ -37,10 +37,12 @@ void creerArbreBinaireEntier(int hauteur, ArbreEntier * arbre)
 		arbre->filsDroit = NULL;
 		arbre->filsGauche = NULL;
 		arbre->valeur = 0;
+		arbre->occurrence = 0;
 		arbre->taille = 0;
 		return;
 	}
 	arbre->valeur=0;
+	arbre->occurrence=0;
 	arbre->taille = 0;
 	(arbre)->filsDroit = malloc(sizeof(ArbreEntier));
 	(arbre)->filsGauche = malloc(sizeof(ArbreEntier));
@@ -48,10 +50,11 @@ void creerArbreBinaireEntier(int hauteur, ArbreEntier * arbre)
 	creerArbreBinaireEntier(hauteur-1, arbre->filsGauche);
 }
 
-ArbreEntier * creerArbreEntierVide(int valeur)
+ArbreEntier * creerArbreEntierVide(int valeur, int occurrence)
 {
 	ArbreEntier * a = malloc(sizeof(ArbreEntier));
 	a->valeur = valeur;
+	a->occurrence = occurrence;
 	a->taille = 0;
 	a->filsGauche=NULL;
 	a->filsDroit=NULL;
@@ -118,10 +121,10 @@ ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence)
 	a->filsDroit=NULL;
 	return a;
 }
-void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole)
+void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole)
 {
 	if (a == NULL) return;
-	ArbreSymbole * noeudCourant;
+	ArbreEntier * noeudCourant;
 	char bit,MASK = 0x1;
 	int bitCourant;
 	noeudCourant = a;
@@ -143,10 +146,9 @@ void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole)
 			}
 		}
 	}
-	if (estFeuille(noeudCourant))
+	if (estFeuilleEntier(noeudCourant))
 	{
-		noeudCourant->valeur= *symbole;
-		noeudCourant->occurrence++;
+		noeudCourant->valeur++;
 	}
 	else
 	{
@@ -165,11 +167,11 @@ ArbreSymbole * ajout2ArbresS(ArbreSymbole * a1, ArbreSymbole * a2){
 }
 
 void print_Abr(ArbreSymbole* a, int l) {
-	int i, j;
+	int j;
 	if (a != NULL) {
 		print_Abr(a->filsDroit, l + 1);
 		for (j = 0; j < l; j++)
-			printf("\t");
+			printf("   ");
 		printf(" %d, %d \n", a->valeur, a->taille);
 		print_Abr(a->filsGauche, l + 1);
 	}
