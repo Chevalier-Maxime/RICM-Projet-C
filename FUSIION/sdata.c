@@ -12,6 +12,28 @@ int ioc(unsigned char c){
 	return c;
 }
 
+ArbreEntier * creerArbreEntierVide(int valeur, int occurrence)
+{
+	ArbreEntier * a = malloc(sizeof(ArbreEntier));
+	a->valeur = valeur;
+	a->occurrence = occurrence;
+	a->taille = 0;
+	a->filsGauche=NULL;
+	a->filsDroit=NULL;
+	return a;
+}
+
+ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence)
+{
+	ArbreSymbole * a = malloc(sizeof(ArbreSymbole));
+	a->valeur = valeur;
+	a->occurrence = occurrence;
+	a->taille = 0;
+	a->filsGauche=NULL;
+	a->filsDroit=NULL;
+	return a;
+}
+
 void creerArbreBinaire(int hauteur, ArbreSymbole * arbre)
 {
 	if(hauteur ==0){
@@ -50,16 +72,7 @@ void creerArbreBinaireEntier(int hauteur, ArbreEntier * arbre)
 	creerArbreBinaireEntier(hauteur-1, arbre->filsGauche);
 }
 
-ArbreEntier * creerArbreEntierVide(int valeur, int occurrence)
-{
-	ArbreEntier * a = malloc(sizeof(ArbreEntier));
-	a->valeur = valeur;
-	a->occurrence = occurrence;
-	a->taille = 0;
-	a->filsGauche=NULL;
-	a->filsDroit=NULL;
-	return a;
-}
+
 
 //Changé
 int nombreOccurrence(ArbreEntier * arbre, unsigned char symbole)
@@ -109,18 +122,6 @@ ArbreEntier * ajouterNoeudParent(ArbreEntier * fils, char direction)
 	return arbre;
 }
 
-
-
-ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence)
-{
-	ArbreSymbole * a = malloc(sizeof(ArbreSymbole));
-	a->valeur = valeur;
-	a->occurrence = occurrence;
-	a->taille = 0;
-	a->filsGauche=NULL;
-	a->filsDroit=NULL;
-	return a;
-}
 void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole)
 {
 	if (a == NULL) return;
