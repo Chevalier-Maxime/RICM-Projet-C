@@ -322,6 +322,7 @@ int main(void)
 	fichierADecompresser = fopen("licorne.txt", "w+b");
 
 	ArbreSymbole * arbreCanonique = Decompression(tableauHuffman->Symbole, tableauHuffman->TailleS,d->nbSymboles);
+	printf("\n\n\n");
 	print_Abr(arbreCanonique, 0);
 
 	realiserDecompressionASCII(arbreCanonique, d, e);
