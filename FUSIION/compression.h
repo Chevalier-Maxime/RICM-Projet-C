@@ -34,7 +34,7 @@ typedef struct HuffSymb {
 
 void initTableau(TabHuff* t);
 
-void ecritTableau(ArbreSymbole* aa, ArbreSymbole* a, TabHuff* t, unsigned char Longueur, unsigned char Symbole, unsigned char Indice);
+void ecritTableau(ArbreSymbole* a, TabHuff* t, unsigned char Longueur, unsigned char Symbole, unsigned char Indice);
 
 //Tri par insertion
 void TriArbreTableau(ArbreSymbole* a, TabHuff* t);

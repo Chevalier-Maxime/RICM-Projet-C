@@ -3,6 +3,8 @@
 #include "sdata.h"
 #include "compression.h"
 
+
+//Initialise la structure donnée en paramètre
 void initTableau(TabHuff* t) {
 	int i;
 	for (i = 0; i<256; i++) {
@@ -14,7 +16,8 @@ void initTableau(TabHuff* t) {
 	t->Taille = 0;
 }
 
-void ecritTableau(ArbreSymbole* aa, ArbreSymbole* a, TabHuff* t, unsigned char Longueur, unsigned char Symbole, unsigned char Indice) {
+//Complète la structure de tableaux d'après un arbre de symboles
+void ecritTableau(ArbreSymbole* a, TabHuff* t, unsigned char Longueur, unsigned char Symbole, unsigned char Indice) {
 	unsigned char NewSymbole;
 
 	if (estFeuille(a)) {
@@ -25,12 +28,12 @@ void ecritTableau(ArbreSymbole* aa, ArbreSymbole* a, TabHuff* t, unsigned char L
 
 	else {
 		NewSymbole = Symbole + Longueur;
-		ecritTableau(aa, a->filsGauche, t, Longueur / 2, Symbole, Indice);
-		ecritTableau(aa, a->filsDroit, t, Longueur / 2, NewSymbole, Indice + Longueur);
+		ecritTableau(a->filsGauche, t, Longueur / 2, Symbole, Indice);
+		ecritTableau(a->filsDroit, t, Longueur / 2, NewSymbole, Indice + Longueur);
 	}
 }
 
-//Tri par insertion
+//Tri la structure selon un tri par insertion puis élimine les occurrences nulles de symbole
 void TriArbreTableau(ArbreSymbole* a, TabHuff* t) {
 	int i, j, x, y;
 
@@ -61,6 +64,7 @@ void TriArbreTableau(ArbreSymbole* a, TabHuff* t) {
 	}
 }
 
+//Renvoie 1 si une compression par Package Merge est nécessaire
 int TestMerge(TabHuff* TH, donnees d) {
 	int LmaxOpti = 0, i;
 	for(i=0;i<TH->Taille;i++)
@@ -70,6 +74,7 @@ int TestMerge(TabHuff* TH, donnees d) {
 		return 0;
 	return 1;
 }
+
 
 void SymboleHuffman(ArbreSymbole* a, HuffSymb * HS, unsigned char Valeur) {
 
