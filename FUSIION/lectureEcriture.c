@@ -133,20 +133,20 @@ int ecritureBit(FILE * fichier, unsigned char* symbole)
 	if(dE==NULL)
 	{
 		 dE = malloc(sizeof(dernierOctet));
-		 dE->positionCourante = 0;
+		 dE->positionCourante = 7;
 		 dE->dernierOctetLu = 0x0;
 		 dE->taille = 0;
 	}
-	if(dE->positionCourante==8)
+	if(dE->positionCourante==-1)
 	{
 		int resultat = fwrite(&(dE->dernierOctetLu), sizeof(char), 1, fichier);
 		if(resultat == EOF) return 0;
-		dE->positionCourante=0;
+		dE->positionCourante=7;
 		dE->dernierOctetLu = 0x0;
 		dE->taille = 0;
 	}
 	dE->dernierOctetLu = ((*symbole & MASK)<<dE->positionCourante) | dE->dernierOctetLu; //-----------Modif /!\ : ((*symbole & MASK)<<dE->positionCourante) | dE->dernierOctetLu
-	dE->positionCourante++;
+	dE->positionCourante--;
 	dE->taille++;
 	return 1;
 }
@@ -225,7 +225,7 @@ void realiserDecompressionASCII(ArbreSymbole * arbreCanonique, donnees * d, ente
 	unsigned char bit;
 	ArbreSymbole * noeudCourant = arbreCanonique;
 	int i=0;
-	while (i<=e->nbSymboles)
+	while (i<e->nbSymboles-1)
 	{
 		lectureBit(fichierCompresse,&bit); //PENSER A OUVRIR LE FICHIER QUELQUE PART en mode w+b
 		if (bit == 0x1)
