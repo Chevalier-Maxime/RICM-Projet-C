@@ -38,7 +38,7 @@ void TriArbreTableau(ArbreSymbole* a, TabHuff* t) {
 	int i, j, x, y;
 
 	initTableau(t);
-	ecritTableau(a, a, t, 128, 0, 0);
+	ecritTableau(a, t, 128, 0, 0);
 
 	for (j = 1; j<t->Taille; j++) {
 		x = t->Symbole[j];
@@ -206,7 +206,6 @@ ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 		TailleSymbole(Arb.a[0], 0, Tab);
 		//print_Abr(AS, 0);
 		return ConversionArbre(Arb.a[0]);
-;
 	}
 	exit(0);
 }
