@@ -151,8 +151,7 @@ void AjoutTailleTH(unsigned char Symbole, TabHuff* TH, int Taille) {
 		i--;
 	while (i >= 0 && TH->Symbole[i] != Symbole)
 		i--;
-	if (i != 0)
-		TH->TailleS[i] = Taille;
+	TH->TailleS[i] = Taille;
 }
 
 
@@ -190,7 +189,7 @@ ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 		Arb.Taille--;
 
 		i = 1;
-		while (i<Arb.Taille-1 && (Arb.a[0]->valeur >= Arb.a[i]->valeur + Arb.a[i + 1]->valeur)) {
+		while (i<Arb.Taille-1 && (Arb.a[0]->occurrence >= Arb.a[i]->occurrence + Arb.a[i + 1]->occurrence)) {
 			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i + 1]);
 			i++;
 			for (j = i; j<Arb.Taille; j++)
@@ -321,5 +320,23 @@ ArbreEntier * Compression(donnees d){
 	//a = Merge(d, &Tab);
 
 	return a;
+
+}
+
+#define N 257
+void initialiserLongueur(int * Longueur, ArbreEntier * huffmanTransforme)
+{
+	if (estFeuilleEntier(huffmanTransforme))
+	{
+
+		return;
+	}
+
+}
+
+ArbreEntier * creerArbreCanonique(donnees d, ArbreEntier * huffmanTransforme)
+{
+	int Longueur[N];
+	initialiserLongueur(Longueur, huffmanTransforme);
 
 }
