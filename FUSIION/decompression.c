@@ -22,7 +22,7 @@ ArbreSymbole* Decompression(unsigned char TS[256], int TT[256], int nbSymboles){
 		Arb.Taille--;
 
 		i = 1;
-		while (i<Arb.Taille-1 && (Arb.a[0]->occurrence >= Arb.a[i]->occurrence + Arb.a[i + 1]->occurrence)) {
+		while (i<Arb.Taille-1 && (Arb.a[0]->occurrence < Arb.a[i]->occurrence + Arb.a[i + 1]->occurrence)) {
 			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i + 1]);
 			i++;
 			for (j = i; j<Arb.Taille; j++)
