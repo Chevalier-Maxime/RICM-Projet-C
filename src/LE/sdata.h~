@@ -2,6 +2,8 @@
 #define SEQUENCE_DEBUT //#TODO a definir
 
 
+#ifndef SDATA_H
+#define SDATA_H
 
 typedef struct ArbreEntier
 {
@@ -40,9 +42,11 @@ union octet{
 
 void creerArbreBinaire(int hauteur, ArbreEntier * arbre);
 int nombreOccurance(ArbreEntier * arbre, char symbole);
-int estFeuille(ArbreEntier * arbre);
+int estFeuilleE(ArbreEntier * arbre);
+int estFeuilleS(ArbreSymbole * arbre);
 ArbreEntier * ajouterNoeudParentEntier(ArbreEntier * fils, char dirrection);
 ArbreEntier * creerArbreEntierVide(int valeur);
 
 ArbreSymbole * creerArbreSymboleVide(char valeur);
 
+#endif

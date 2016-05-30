@@ -190,3 +190,17 @@ void print_AbrE(ArbreEntier* a, int l) {
 	}
 	return;
 }
+
+entete * creerEntete(int nbSymb, int tabI[256], unsigned char tabS[256])
+{
+	entete * res = malloc(sizeof(entete));
+	res->nbSymboles=nbSymb;
+	int i;
+	for ( i = 0; i <256; i++)
+	{
+		res->TailleS[i] = tabI[i];
+		res->Symbole[i] = tabS[i];
+	}
+	
+	return res;
+}

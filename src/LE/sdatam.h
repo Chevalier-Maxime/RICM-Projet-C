@@ -1,7 +1,12 @@
-#define TAILLE_SEQUENCE_DEBUT //#TODO a definir
-#define SEQUENCE_DEBUT //#TODO a definir
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TAILLE_SEQUENCE_DEBUT 1//#TODO a definir
+#define SEQUENCE_DEBUT 3//#TODO a definir
 
 
+#ifndef SDATA_H
+#define SDATA_H
 
 typedef struct ArbreEntier
 {
@@ -15,7 +20,6 @@ typedef struct ArbreSymbole
 	struct ArbreSymbole* filsGauche;
 	struct ArbreSymbole* filsDroit;
 	char valeur;
-	int visite;
 } ArbreSymbole;
 
 typedef struct donnees
@@ -25,12 +29,13 @@ typedef struct donnees
 	int Lmax; //donné
 } donnees;
 
-typedef struct entete
+typedef struct entete //MODIFICATION TAB A METTRE ICI ET PAS DANS DONNEE
 {
 	int nbSymboles;
-	ArbreSymbole* arbreCanonique;
 	int nbPadding;
 	int tailleEntete;
+	int TailleS[256];
+	unsigned char Symbole[256];
 } entete;
 
 union octet{
@@ -40,9 +45,15 @@ union octet{
 
 void creerArbreBinaire(int hauteur, ArbreEntier * arbre);
 int nombreOccurance(ArbreEntier * arbre, char symbole);
-int estFeuille(ArbreEntier * arbre);
+int estFeuilleE(ArbreEntier * arbre);
+int estFeuilleS(ArbreSymbole * arbre);
 ArbreEntier * ajouterNoeudParentEntier(ArbreEntier * fils, char dirrection);
 ArbreEntier * creerArbreEntierVide(int valeur);
 
 ArbreSymbole * creerArbreSymboleVide(char valeur);
+ArbreSymbole * insererfils(ArbreSymbole * arbre,ArbreSymbole * g,ArbreSymbole * d);
 
+entete * creerEntete(int nbSymb, int tabI[256], unsigned char tabS[256]);
+
+
+#endif
