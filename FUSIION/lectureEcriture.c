@@ -157,7 +157,7 @@ int pousserEcritureBit(FILE * fichier)
 	return fwrite(&(dE->dernierOctetLu), sizeof(char), 1, fichier);
 }
 
-int realiserCompressionASCII(ArbreSymbole * a, donnees * d)
+int realiserCompressionASCII(ArbreEntier * a, donnees * d)
 {
 	fichierCompresse=fopen(NOM_FICHIER_COMP, "w+b");
 	fclose(fichierACompresser);
@@ -178,13 +178,13 @@ int realiserCompressionASCII(ArbreSymbole * a, donnees * d)
 }
 
 
-int transcoderASCII(char c, ArbreSymbole * a)
+int transcoderASCII(char c, ArbreEntier * a)
 {
-	ArbreSymbole * noeudCourant;
-	char bit, MASK = 0x1;
+	ArbreEntier * noeudCourant;
+	unsigned int MASK = 0x1;
+	unsigned char bit;
 	int bitCourant;
 	noeudCourant = a;
-
 	for (bitCourant = 7; bitCourant >= 0; bitCourant--)
 	{
 		bit = ((MASK << bitCourant)&c) >> bitCourant;
@@ -202,9 +202,9 @@ int transcoderASCII(char c, ArbreSymbole * a)
 			}
 		}
 	}
-	if (estFeuille(noeudCourant)){
+	if (estFeuilleEntier(noeudCourant)){
 		int i;
-		if (noeudCourant->taille > 7) printf("lectureEcriture.c : taille symbole trop importante pour un char.");
+		//if (noeudCourant->taille > 7) printf("lectureEcriture.c : taille symbole trop importante pour un char.");
 		for (i = noeudCourant->taille-1; i >=0 ;i--)
 		{
 			bit = ((MASK << i)&noeudCourant->valeur) >> i;
@@ -268,11 +268,8 @@ int main(void)
 	//Met des 1 dans les noeuds, mettre des 0 --> demander HUGO
 	creerArbreBinaire(8, d->arbre);
 	lireFichier(d);
-
-	
-
-	ArbreSymbole * a = Compression(*d);
-	print_Abr(a, 0);
+	ArbreEntier * a = Compression(*d);
+	//print_Abr(a, 0);
 
 	realiserCompressionASCII(a, d);
 	
