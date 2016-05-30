@@ -218,6 +218,38 @@ int transcoderASCII(char c, ArbreEntier * a)
 	return noeudCourant->taille;
 }
 
+void realiserDecompressionASCII(ArbreSymbole * arbreCanonique, donnees * d, entete * e)
+{
+	unsigned int MASK = 0x1;
+	unsigned char bit;
+	int bitCourant;
+	ArbreSymbole * noeudCourant = arbreCanonique;
+	int i=0;
+	while (i<=e->nbSymboles)
+	{
+		lectureBit(fichierADecompresser,&bit); //PENSER A OUVRIR LE FICHIER QUELQUE PART en mode w+b
+		if (bit == 0x1)
+		{
+			if (noeudCourant->filsDroit != NULL)
+			{
+				noeudCourant = noeudCourant->filsDroit;
+			}
+		}
+		if (bit == 0x0) {
+			if (noeudCourant->filsGauche != NULL)
+			{
+				noeudCourant = noeudCourant->filsGauche;
+			}
+		}
+		if (estFeuille(noeudCourant))
+		{
+			fwrite(&noeudCourant->valeur, sizeof(char), 1, fichierADecompresser);
+			i++;
+			noeudCourant = arbreCanonique;
+		}
+	}
+}
+
 int main(void)
 {
 	/*	//Test lecture
