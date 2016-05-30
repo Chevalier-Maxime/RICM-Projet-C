@@ -1,5 +1,5 @@
-#ifndef COMPRESSION_H
-#define COMPRESSION_H
+#ifndef DECOMPRESSION_H
+#define DECOMPRESSION_H
 
 #include "sdata.h"
 

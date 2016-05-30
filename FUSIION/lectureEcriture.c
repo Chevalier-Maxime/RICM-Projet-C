@@ -1,5 +1,6 @@
 #include "lectureEcriture.h"
 #include "compression.h"
+#include "decompression.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -222,12 +223,11 @@ void realiserDecompressionASCII(ArbreSymbole * arbreCanonique, donnees * d, ente
 {
 	unsigned int MASK = 0x1;
 	unsigned char bit;
-	int bitCourant;
 	ArbreSymbole * noeudCourant = arbreCanonique;
 	int i=0;
 	while (i<=e->nbSymboles)
 	{
-		lectureBit(fichierADecompresser,&bit); //PENSER A OUVRIR LE FICHIER QUELQUE PART en mode w+b
+		lectureBit(fichierCompresse,&bit); //PENSER A OUVRIR LE FICHIER QUELQUE PART en mode w+b
 		if (bit == 0x1)
 		{
 			if (noeudCourant->filsDroit != NULL)
@@ -314,6 +314,20 @@ int main(void)
 	}
 
 	int padding = realiserCompressionASCII(a, d, e);
+
+	fclose(fichierCompresse);
+	fclose(fichierACompresser);
+
+	fichierCompresse = fopen(NOM_FICHIER_COMP, "r+b");
+	fichierADecompresser = fopen("licorne.txt", "w+b");
+
+	ArbreSymbole * arbreCanonique = Decompression(tableauHuffman->Symbole, tableauHuffman->TailleS,d->nbSymboles);
+	print_Abr(arbreCanonique, 0);
+
+	realiserDecompressionASCII(arbreCanonique, d, e);
+
+	fclose(fichierADecompresser);
+	fclose(fichierCompresse);
 	
     return 0;
 }

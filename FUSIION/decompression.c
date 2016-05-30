@@ -32,7 +32,6 @@ ArbreSymbole* Decompression(unsigned char TS[256], int TT[256], int nbSymboles){
 	}
 	if(Arb.Taille!=0){
 		Arb.a[0] = ajout2ArbresS(Arb.a[0], Arb.a[1]);
-		TailleSymbole(Arb.a[0], 0, Tab);
 		print_Abr(Arb.a[0], 0);
 		return Arb.a[0];
 	}
