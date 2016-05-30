@@ -15,8 +15,8 @@ int ioc(unsigned char c){
 void creerArbreBinaire(int hauteur, ArbreSymbole * arbre)
 {
 	if(hauteur ==0){
-		arbre->valeur = 1;
-		arbre->occurrence = 1;
+		arbre->valeur = 0;
+		arbre->occurrence = 0;
 		arbre->taille = 0;
 		arbre->filsDroit = NULL;
 		arbre->filsGauche = NULL;
@@ -121,10 +121,10 @@ ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence)
 	a->filsDroit=NULL;
 	return a;
 }
-void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole)
+void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole)
 {
 	if (a == NULL) return;
-	ArbreEntier * noeudCourant;
+	ArbreSymbole * noeudCourant;
 	char bit,MASK = 0x1;
 	int bitCourant;
 	noeudCourant = a;
@@ -146,9 +146,9 @@ void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole)
 			}
 		}
 	}
-	if (estFeuilleEntier(noeudCourant))
+	if (estFeuille(noeudCourant))
 	{
-		noeudCourant->valeur++;
+		noeudCourant->occurrence++;
 	}
 	else
 	{

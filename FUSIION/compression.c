@@ -316,9 +316,9 @@ ArbreEntier * Compression(donnees d){
 
 	a = Huffman(d, &Tab);
 
-	if(TestMerge(&Tab,d))
-		a = Merge(d, &Tab);
-	a = Merge(d, &Tab);
+	//if(TestMerge(&Tab,d))
+		//a = Merge(d, &Tab);
+	//a = Merge(d, &Tab);
 
 	return a;
 

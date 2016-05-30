@@ -15,7 +15,7 @@
 	int ecritureOctet(FILE * fichier, unsigned char* symbole);
 	int ecritureBit(FILE * fichier, unsigned char* symbole);
 	void remplirDonneeFichierASCII(donnees * d);
-	int transcoderASCII(char c, ArbreSymbole * a);
+	int transcoderASCII(char c, ArbreEntier * a);
 #endif
 
 

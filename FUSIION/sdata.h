@@ -68,7 +68,7 @@ ArbreEntier * creerArbreEntierVide(int valeur, int occurrence);
 
 ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence);
 ArbreEntier * ajout2Arbres(ArbreEntier * a, ArbreEntier * a2);
-void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole);
+void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole);
 
 ArbreSymbole * ajout2ArbresS(ArbreSymbole * a, ArbreSymbole * a2);
 
