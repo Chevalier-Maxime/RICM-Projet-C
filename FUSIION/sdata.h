@@ -9,6 +9,7 @@ typedef struct ArbreEntier
 	struct ArbreEntier* filsGauche;
 	struct ArbreEntier* filsDroit;
 	int valeur;
+	int occurrence;
 	int taille;
 } ArbreEntier;
 
@@ -16,7 +17,7 @@ typedef struct ArbreSymbole
 {
 	struct ArbreSymbole* filsGauche;
 	struct ArbreSymbole* filsDroit;
-	char valeur;
+	unsigned char valeur;
 	int occurrence;
 	int taille;
 } ArbreSymbole;
@@ -61,11 +62,11 @@ int estFeuille(ArbreSymbole * arbre);
 int estFeuilleEntier(ArbreEntier * arbre);
 
 ArbreEntier * ajouterNoeudParentEntier(ArbreEntier * fils, char dirrection);
-ArbreEntier * creerArbreEntierVide(int valeur);
+ArbreEntier * creerArbreEntierVide(int valeur, int occurrence);
 
 ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence);
 ArbreEntier * ajout2Arbres(ArbreEntier * a, ArbreEntier * a2);
-void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole);
+void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole);
 
 ArbreSymbole * ajout2ArbresS(ArbreSymbole * a, ArbreSymbole * a2);
 
