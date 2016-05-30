@@ -34,10 +34,10 @@ typedef struct HuffSymb {
 
 void initTableau(TabHuff* t);
 
-void ecritTableau(ArbreEntier* aa, ArbreEntier* a, TabHuff* t, unsigned char Longueur, unsigned char Symbole, unsigned char Indice);
+void ecritTableau(ArbreSymbole* aa, ArbreSymbole* a, TabHuff* t, unsigned char Longueur, unsigned char Symbole, unsigned char Indice);
 
 //Tri par insertion
-void TriArbreTableau(ArbreEntier* a, TabHuff* t);
+void TriArbreTableau(ArbreSymbole* a, TabHuff* t);
 int TestMerge(ArbreSymbole * a, donnees d);
 
 void SymboleHuffman(ArbreSymbole* a, HuffSymb * HS, unsigned char Valeur);

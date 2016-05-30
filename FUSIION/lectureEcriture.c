@@ -46,7 +46,7 @@ void remplirDonneeFichierASCII(donnees * d)
 	{
 		res = fgetc(fichierACompresser);
 		c = res;
-		ajouterOccurenceAbreEntier(d->arbre, &c);
+		ajouterOccurenceAbreSymbole(d->arbre, &c);
 		d->nbSymboles++;
 	} while (res != EOF);
 }
@@ -264,9 +264,9 @@ int main(void)
 	donnees * d = malloc(sizeof(donnees));
 	d->Lmax = 8;
 	d->nbSymboles = 0;
-	d->arbre = creerArbreEntierVide(0);
+	d->arbre = creerArbreSymboleVide(0,0);
 	//Met des 1 dans les noeuds, mettre des 0 --> demander HUGO
-	creerArbreBinaireEntier(8, d->arbre);
+	creerArbreBinaire(8, d->arbre);
 	lireFichier(d);
 
 	

@@ -23,7 +23,7 @@ typedef struct ArbreSymbole
 
 typedef struct donnees
 {
-	ArbreEntier* arbre; // -----------------Changé arbre pour HUGO
+	ArbreSymbole* arbre; // -----------------Changé arbre pour HUGO
 	int nbSymboles;
 	int Lmax; //donné
 } donnees;
@@ -65,7 +65,7 @@ ArbreEntier * creerArbreEntierVide(int valeur);
 
 ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence);
 ArbreEntier * ajout2Arbres(ArbreEntier * a, ArbreEntier * a2);
-void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole);
+void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole);
 
 ArbreSymbole * ajout2ArbresS(ArbreSymbole * a, ArbreSymbole * a2);
 

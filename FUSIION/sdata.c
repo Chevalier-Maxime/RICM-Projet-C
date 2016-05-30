@@ -118,10 +118,10 @@ ArbreSymbole * creerArbreSymboleVide(char valeur, int occurrence)
 	a->filsDroit=NULL;
 	return a;
 }
-void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole)
+void ajouterOccurenceAbreSymbole(ArbreSymbole * a, char * symbole)
 {
 	if (a == NULL) return;
-	ArbreEntier * noeudCourant;
+	ArbreSymbole * noeudCourant;
 	char bit,MASK = 0x1;
 	int bitCourant;
 	noeudCourant = a;
@@ -143,9 +143,10 @@ void ajouterOccurenceAbreEntier(ArbreEntier * a, char * symbole)
 			}
 		}
 	}
-	if (estFeuilleEntier(noeudCourant))
+	if (estFeuille(noeudCourant))
 	{
-		noeudCourant->valeur++;
+		noeudCourant->valeur= *symbole;
+		noeudCourant->occurrence++;
 	}
 	else
 	{
