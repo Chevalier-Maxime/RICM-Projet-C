@@ -61,14 +61,11 @@ void TriArbreTableau(ArbreSymbole* a, TabHuff* t) {
 	}
 }
 
-int TestMerge(ArbreSymbole * a, donnees d) {
-	ArbreSymbole* aa = creerArbreSymboleVide(0,0);
-	creerArbreBinaire(8, aa);
-	int LmaxOpti = 0;
-	while (!estFeuille(aa)) {
-		aa = aa->filsGauche;
-		LmaxOpti++;
-	}
+int TestMerge(TabHuff* TH, donnees d) {
+	int LmaxOpti = 0, i;
+	for(i=0;i<TH->Taille;i++)
+		if(TH->TailleS[i]>LmaxOpti)
+			LmaxOpti=TH->TailleS[i];
 	if (LmaxOpti <= d.Lmax)
 		return 0;
 	return 1;
@@ -273,14 +270,13 @@ ArbreSymbole* ConstruireArbre(TabHuff* TH, int Prof, int Indice) {
 
 ArbreSymbole* ArbreMerge(TabHuff* TH) {
 	int Prof = 0;
-	ArbreSymbole* a = ConstruireArbre(TH, Prof, TH->Taille / 2);
-	return a;
+	return ConstruireArbre(TH, Prof, TH->Taille / 2);
 }
 
-ArbreSymbole* Merge(donnees d, TabHuff* TH) {
+ArbreEntier* Merge(donnees d, TabHuff* TH) {
 	TabMerge TM;
 	liste* L;
-	int i, j, k;
+	int i, k;
 
 
 	InitPM(&TM);
@@ -293,15 +289,6 @@ ArbreSymbole* Merge(donnees d, TabHuff* TH) {
 			TM.PoidsP[TM.TailleP] = TM.PoidsM[i] + TM.PoidsM[i + 1];
 			TM.TailleP++;
 			i += 2;
-			for (j = 0; j<TM.TailleP; j++){
-				L = TM.Package[j];
-				if(L==NULL)
-					printf("Fuck\n");
-				while (L != NULL) {
-					printf("%c, ", L->valeur);
-					L = L->Suivant;
-				}
-			}
 		}
 
 	}
@@ -317,7 +304,7 @@ ArbreSymbole* Merge(donnees d, TabHuff* TH) {
 		}
 	}
 
-	return ArbreMerge(TH);
+	return ConversionArbre(ArbreMerge(TH));
 }
 
 
@@ -328,11 +315,11 @@ ArbreEntier * Compression(donnees d){
 	TriArbreTableau(d.arbre, &Tab);
 
 	a = Huffman(d, &Tab);
-/*
-	if(TestMerge(a,d))
+
+	if(TestMerge(&Tab,d))
 		a = Merge(d, &Tab);
 	a = Merge(d, &Tab);
-*/
+
 	return a;
 
 }

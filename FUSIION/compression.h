@@ -38,7 +38,7 @@ void ecritTableau(ArbreSymbole* aa, ArbreSymbole* a, TabHuff* t, unsigned char L
 
 //Tri par insertion
 void TriArbreTableau(ArbreSymbole* a, TabHuff* t);
-int TestMerge(ArbreSymbole * a, donnees d);
+int TestMerge(TabHuff* TH, donnees d);
 
 void SymboleHuffman(ArbreSymbole* a, HuffSymb * HS, unsigned char Valeur);
 void RemplitArbreHuffman(ArbreEntier* a, unsigned char symboleOrigine, int symboleHuffman, unsigned char Taille);
@@ -60,7 +60,7 @@ void AjoutSymbole(unsigned char Symbole, TabHuff* TH);
 ArbreSymbole* ConstruireArbre(TabHuff* TH, int Prof, int Indice);
 ArbreSymbole* ArbreMerge(TabHuff* TH);
 
-ArbreSymbole* Merge(donnees d, TabHuff* TH);
+ArbreEntier* Merge(donnees d, TabHuff* TH);
 
 ArbreEntier * Compression(donnees d);
 
