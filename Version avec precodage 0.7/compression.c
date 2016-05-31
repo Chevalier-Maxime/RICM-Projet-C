@@ -10,6 +10,7 @@ void initTableau(TabHuff* t) {
 	for (i = 0; i<256; i++) {
 		t->Symbole[i] = 0;
 		t->Occurrence[i] = 0;
+		t->Occurrence2[i] = 0;
 		t->TailleS[i] = 0;
 	}
 	t->Taille = 0;
@@ -172,28 +173,25 @@ void TailleSymbole(ArbreSymbole* a, int Taille, TabHuff* TH) {
 	}
 }
 
-//Codage de Huffman
+
+
 ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 	int i = 0, j;
 	TabArb Arb;
 
-	//Définition d'un tableau d'arbres feuilles contenant les symboles et les occurrences associées
-	for (j = 0; j<Tab->Taille; j++)
+	for (j = 0; j<Tab->Taille; j++) {
 		Arb.a[j] = creerArbreSymboleVide(Tab->Symbole[j], Tab->Occurrence[j]);
+	}
 	Arb.Taille = Tab->Taille;
 
-	//Algorithme de Huffman, construction de l'arbre par le bas
 	while (Arb.Taille>2) {
-		//Assemblage des deux premières branches dans le premier arbre
+
 		Arb.a[0] = ajout2ArbresS(Arb.a[0], Arb.a[1]);
 
-		//Réduction de l'arbre en supprimant le membre de droite (inutile à présent)
 		for (j = 1; j<Arb.Taille; j++)
 			Arb.a[j] = Arb.a[j + 1];
 		Arb.Taille--;
 
-		//On fait de même pour toutes les branches suivantes selon leur occurrences
-		//Pour savoir s'il faut mettre les noeuds à la même profondeur ou pas
 		i = 1;
 		while (i<Arb.Taille-1 && (Arb.a[0]->occurrence >= Arb.a[i]->occurrence + Arb.a[i + 1]->occurrence)) {
 			Arb.a[i] = ajout2ArbresS(Arb.a[i], Arb.a[i + 1]);
@@ -203,21 +201,17 @@ ArbreEntier* Huffman(donnees d, TabHuff* Tab) {
 			Arb.Taille--;
 		}
 	}
-	//Rentre dans le if dans tous les cas (vérification au cas où il n'y ait eu aucun symbole à coder)
 	if(Arb.Taille!=0){
-		//S'il reste un seul arbre, c'est qu'il n'y a qu'un seul symbole à coder, sinon, il faut ajouter les deux restants
-		if(Arb.Taille==2)
+		if(Arb.Taille)
 			Arb.a[0] = ajout2ArbresS(Arb.a[0], Arb.a[1]);
-		//On complète la structure TabHuff avec l'arbre créé
 		TailleSymbole(Arb.a[0], 0, Tab);
 		//print_Abr(AS, 0);
 		return ConversionArbre(Arb.a[0]);
 	}
-	//Ne devrait jamais arriver
 	exit(0);
 }
 
-void InitPM(TabMerge* TM, TabHuff* TH) {
+void InitPM(TabMerge* TM) {
 	int i;
 	for (i = 0; i<2048; i++) {
 		liste* lp = malloc(sizeof(liste*));
@@ -232,8 +226,6 @@ void InitPM(TabMerge* TM, TabHuff* TH) {
 		TM->PoidsP[i] = 0;
 		TM->PoidsM[i] = 0;
 	}
-	for(i=0;i<TH->Taille;i++)
-		TM->Occurrence2[i]=0;
 	TM->TailleP = 0;
 	TM->TailleM = 0;
 }
@@ -259,7 +251,7 @@ void MergeAjout(TabHuff* TH, TabMerge* TM) {
 		TM->PoidsM[k]=0;
 	}
 	for (k = 0; k<TM->TailleM; k++) {
-		if (i<TH->Taille && TH->Occurrence[i]<=TM->PoidsP[j]) {
+		if (i<TH->Taille && TH->Occurrence[i]<TM->PoidsP[j]) {
 			TM->Merge[k]->valeur = TH->Symbole[i];
 			TM->PoidsM[k] = TH->Occurrence[i];
 			i++;
@@ -272,93 +264,70 @@ void MergeAjout(TabHuff* TH, TabMerge* TM) {
 	}
 }
 
-void AjoutSymbole(unsigned char Symbole, TabHuff* TH, TabMerge* TM) {
+void AjoutSymbole(unsigned char Symbole, TabHuff* TH) {
 	int i = 0;
 	while (i<TH->Taille && TH->Symbole[i] != Symbole)
 		i++;
 	if (i != TH->Taille)
-		TM->Occurrence2[i]++;
+		TH->Occurrence2[i]++;
 }
 
-ArbreSymbole* ConstruireArbre(TabHuff* TH, TabMerge* TM, int Prof, int Indice) {
-	if (Prof == TM->Occurrence2[Indice]){
+ArbreSymbole* ConstruireArbre(TabHuff* TH, int Prof, int Indice) {
+	if (Prof == TH->Occurrence2[Indice])
 		return creerArbreSymboleVide(TH->Symbole[Indice],0);
-	}
-	return ajout2ArbresS(ConstruireArbre(TH, TM, Prof + 1, Indice / 2), ConstruireArbre(TH, TM, Prof + 1, Indice + Indice / 2));
+	return ajout2ArbresS(ConstruireArbre(TH, Prof + 1, Indice / 2), ConstruireArbre(TH, Prof + 1, Indice + Indice / 2));
 
 }
 
-ArbreSymbole* ArbreMerge(TabHuff* TH, TabMerge* TM) {
-	return ConstruireArbre(TH, TM, 0, TH->Taille / 2);
+ArbreSymbole* ArbreMerge(TabHuff* TH) {
+	return ConstruireArbre(TH, 0, TH->Taille / 2);
 }
 
 ArbreEntier* Merge(donnees d, TabHuff* TH) {
-	TabMerge* TM = malloc(sizeof(TabMerge));
+	TabMerge TM;
 	liste* L;
 	int i, k;
-
-	InitPM(TM, TH);
-
+	InitPM(&TM);
 	for (k = 0; k<d.Lmax; k++) {
-
-		MergeAjout(TH, TM);
-
+		MergeAjout(TH, &TM);
 		i = 0;
-		TM->TailleP = 0;
-		while (i<TM->TailleM - 1) {
-			TM->Package[TM->TailleP] = Concat2Listes(TM->Merge[i], TM->Merge[i + 1]);
-			TM->PoidsP[TM->TailleP] = TM->PoidsM[i] + TM->PoidsM[i + 1];
-			TM->TailleP++;
+		TM.TailleP = 0;
+		while (i<TM.TailleM - 2) {
+			TM.Package[TM.TailleP] = Concat2Listes(TM.Merge[i], TM.Merge[i + 1]);
+			TM.PoidsP[TM.TailleP] = TM.PoidsM[i] + TM.PoidsM[i + 1];
+			TM.TailleP++;
 			i += 2;
-		}
-		if(i!=TM->TailleM){
-			TM->Package[TM->TailleP] = TM->Merge[i];
-			TM->PoidsP[TM->TailleP] = TM->PoidsM[i];
-			TM->TailleP++;			
 		}
 
 	}
-	//Ne devrait jamais arriver
-	if (TM->TailleP != (TH->Taille - 2))
-		exit(0);
+	printf("Hey\n");
+	if (TM.TailleP != (d.nbSymboles - 2))
+		printf("Taille : %d\n", TM.TailleP);
 
-	for (k = 0; k<TM->TailleP; k++) {
-		L = TM->Package[k];
+	for (k = 0; k<TM.TailleP; k++) {
+		L = TM.Package[k];
 		while (L != NULL) {
-			AjoutSymbole(L->valeur, TH, TM);
+			AjoutSymbole(L->valeur, TH);
 			L = L->Suivant;
 		}
 	}
-	for(k=0;k<TH->Taille;k++)
-		//printf("%d\n", TM.Occurrence2[k]);
 
-
-	return ConversionArbre(ArbreMerge(TH, TM));
+	return ConversionArbre(ArbreMerge(TH));
 }
 
-void RealCanonique(Canonique* C, TabHuff* TH){
-	int i;
-	C->Taille=TH->Taille;
-	for(i=0;i<C->Taille;C++){
-		C->Symbole[i]=TH->Symbole[i];
-		C->TailleS[i]=TH->TailleS[i];
-	}
-}
 
-ArbreEntier * Compression(donnees d, Canonique* C){
+ArbreEntier * Compression(donnees d, TabHuff * Tab){
 	ArbreEntier* a;
-	TabHuff* Tab = malloc(sizeof(TabHuff));
 
 	TriArbreTableau(d.arbre, Tab);
 
 	a = Huffman(d, Tab);
 
 	//if(TestMerge(&Tab,d))
-		//a = Merge(d, Tab);
-
-	RealCanonique(C, Tab);
+		//a = Merge(d, &Tab);
+	//a = Merge(d, &Tab);
 
 	return a;
-}
 
+}
 

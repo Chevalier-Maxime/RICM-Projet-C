@@ -93,7 +93,7 @@ void main()
 		else
 		{
 			donnees * d = malloc(sizeof(donnees));
-			Canonique * Canoniq = malloc(sizeof(Canonique));
+			TabHuff * tableauHuffman = malloc(sizeof(TabHuff));
 			d->Lmax = 8;
 			d->nbSymboles = 0;
 			d->arbre = creerArbreSymboleVide(0, 0);
@@ -106,17 +106,17 @@ void main()
 			//Rempli la structure d a partir du fichier. ----> Si pretraitement mettre fichier temporaire ici
 			remplirDonneeFichierASCII(d, fichierACompresser);
 
-			ArbreEntier * a = Compression(*d, Canoniq);
+			ArbreEntier * a = Compression(*d, tableauHuffman);
 			//print_Abr(a, 0);
 
 			entete * e = malloc(sizeof(entete));
 			e->nbSymboles = d->nbSymboles;
-			e->nbSymbolesDifferents = Canoniq->Taille;
+			e->nbSymbolesDifferents = tableauHuffman->Taille;
 			int i;
 			for (i = 0; i < 256; i++)
 			{
-				e->Symbole[i] = Canoniq->Symbole[i];
-				e->TailleS[i] = Canoniq->TailleS[i];
+				e->Symbole[i] = tableauHuffman->Symbole[i];
+				e->TailleS[i] = tableauHuffman->TailleS[i];
 			}
 
 			fichierCompresse = fopen(nomFichierCompresser, "w+b");
