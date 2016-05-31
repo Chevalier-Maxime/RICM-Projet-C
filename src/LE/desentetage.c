@@ -2,31 +2,52 @@
 #include <stdlib.h>
 #include "desentetage.h"
 #include "sdata.h"
-#include <string.h>
 
 entete * decrypterentete(FILE* fichier)
 {
-	char identifiant[4];
-	int nbSymb,i,nbSDifferents;
-	
-	fread(identifiant, sizeof(char), 4, fichier);
-	if (!strcmp(identifiant, "1815")) {
-		printf("fichier non compil� par nos soins !\n"); exit(0);
+	char c;
+	int courant = 0,nbSymb,i,k;
+	courant=fgetc(fichier);
+	if(courant!='1') 
+	{
+		printf("identifiant non reconnu\n");
+		exit(0);
 	}
-	
-	fread(&nbSymb, sizeof(int), 1, fichier); //On lit le nombre de symboles
-	fread(&nbSDifferents, sizeof(int), 1, fichier); //On lit le nombre de symboles
-
+	courant=fgetc(fichier);
+	if(courant!='8') 
+	{
+		printf("identifiant non reconnu\n");
+		exit(0);
+	}
+	courant=fgetc(fichier);
+	if(courant!='1') 
+	{
+		printf("identifiant non reconnu\n");
+		exit(0);
+	}
+	courant=fgetc(fichier);
+	if(courant!='5') 
+	{
+		printf("identifiant non reconnu\n");
+		exit(0);
+	}
+	courant=fgetc(fichier);
+	nbSymb=courant-48;
 	unsigned char tabS[256];
 	int tabI[256];
 	i=0;
-	while(i<nbSDifferents)
+	while(i!=nbSymb)
 	{
-		fread(&(tabS[i]), sizeof(char), 1, fichier); //On lit le symbole
-		fread(&(tabI[i]), sizeof(int), 1, fichier); //On lit la profondeur
+		c=fgetc(fichier);
+		printf("%c\n",c);
+		tabS[i]=c;
+		k = calcule(fichier);
+		printf("%d\n",k);
+		tabI[i]=k;
 		i++;
+		printf("finboucle\n");
 	}
-	entete * ent =creerEntete(nbSymb, nbSDifferents, tabI,tabS);
+	entete * ent =creerEntete(nbSymb, tabI,tabS);
 	return ent;
 }
 		

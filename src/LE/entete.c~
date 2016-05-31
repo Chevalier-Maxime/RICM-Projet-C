@@ -1,0 +1,155 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "entete.h"
+#include "sdata.h"
+
+void ecrireentete(entete ent,FILE* fichieraenteter )
+{
+	int i,j,res,id = 1815;
+	j=ent.nbSymboles;
+	int tab[3*j+2];
+	tab[0]=id;
+	tab[1]=j;
+	i=2;
+	while(j!=0)
+	{
+		tab[i]=(int)parcoursSymbole(ent.arbreCanonique);
+		tab[i+1]=profondeurParcours(ent.arbreCanonique);
+		tab[i+2]=parcours(ent.arbreCanonique,0);
+		i=i+3;
+		visiteparcours(ent.arbreCanonique);
+		j=j-1;
+	}
+	for(i=0,i<3*j+2,i++)
+	{
+		fprintf(fichieraenteter,"%d",tab[i]);
+	}
+	return;
+}
+
+void visiteparcours(ArbreSymbole * arbre)
+{
+	if(arbre->filsGauche->visite && arbre->filsDroit->visite)
+		{
+			arbre->visite=1;
+		}
+	visiteparcours(arbre->filsGauche);
+	visiteparcours(arbre->filsDroit);	
+}
+
+int parcours(ArbreSymbole* arbre,int i) //retourne le chemin d'un symbole
+{
+	ArbreSymbole* g=arbre->filsGauche,d=arbre->filsDroit;
+
+	if(estFeuilleS(g) && estFeuilleS(d))
+		{
+			arbre->visite=1;
+			return 1;
+		}
+	else
+		{
+		if(!g->visite && !d->visite)
+			{
+				 return parcours(d,i*2);
+			}
+		else 
+			{
+			if(!g->visite && d->visite)
+				{
+		 			return parcours(g,i*2+1);
+				}
+			else 
+				{
+				if(g->visite && !d->visite)
+					{
+		 				return parcours(d,i*2);
+					}
+				else
+					{
+						printf("Erreur dans le parcours de l'arbre");
+						return 0;
+					}
+				}
+			}
+		}
+}
+
+char parcoursSymbole(ArbreSymbole * arbre)		//retourne un symbole
+{
+	ArbreSymbole* g=arbre->filsGauche,d=arbre->filsDroit;
+
+	if(!g->visite && !d->visite)
+		{
+			 return parcoursSymbole(d);
+		}
+	else
+		{
+		if(!g->visite && d->visite)
+			{
+		 		return parcoursSymbole(g);
+			}
+		else
+			{
+			if(g->visite && !d->visite)
+				{
+		 			return parcoursSymbole(d);
+				}
+			else
+				{
+				if(estFeuilleS(d) && estFeuilleS(g))
+					{
+						return (arbre->valeur);
+					}
+				else
+					{
+						printf("Erreur dans le parcoursSymbole de l'arbre");
+						return 'Z';
+					}
+				}
+			}
+		}
+}
+
+int profondeurParcours(ArbreSymbole * arbre) //retourne la profondeur d'un symbole
+{
+	ArbreSymbole* g=arbre->filsGauche,d=arbre->filsDroit;
+	if(!(g->visite) && !(d->visite))
+	{
+		 return (1+profondeurParcours(d));
+	}
+	else
+		{
+		 if(!(g->visite) && (d->visite))
+			{
+		 		return (1+profondeurParcours(g));
+			}
+		else
+			{
+		 	if((g->visite) && !(d->visite))
+				{
+		 			return (1+profondeurParcours(d));
+				}
+			else
+				{
+				 if(estFeuilleS(d) && estFeuilleS(g))
+					{
+						return 0;
+					}
+				else
+					{
+						printf("Erreur dans le parcoursSymbole de l'arbre");
+						return -1000;
+					}
+				}
+			}
+		}
+}	
+
+
+
+
+
+
+
+
+

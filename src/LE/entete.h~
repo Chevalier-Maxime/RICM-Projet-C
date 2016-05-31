@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "sdata.h"
+
+#ifndef ENTETE_H
+#define ENTETE_H
+
+void ecrireentete(entete * entete,FILE* fichieraenteter );
+
+void visiteparcours(ArbreSymbole* arbre);
+
+char parcoursSymbole(ArbreSymbole* arbre);
+
+int profondeurParcours(ArbreSymbole* arbre);
+
+#endif

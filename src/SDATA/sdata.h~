@@ -15,7 +15,6 @@ typedef struct ArbreSymbole
 	struct ArbreSymbole* filsGauche;
 	struct ArbreSymbole* filsDroit;
 	char valeur;
-	int visite;
 } ArbreSymbole;
 
 typedef struct donnees

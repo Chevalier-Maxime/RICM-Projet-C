@@ -9,15 +9,11 @@ void ecriture(int i,FILE* fichierPretraite,int courant)
 				if(i>0 && i<=255)
 					{
 						fprintf(fichierPretraite,"%d",i); 
-						fprintf(fichierPretraite,"%c",'S');
-						fprintf(fichierPretraite,"%c",'S');
 						i=0;
 					}
 				if(i>255 && i<=257)				
 					{
 						fprintf(fichierPretraite,"%d",130);
-						fprintf(fichierPretraite,"%c",'S');
-						fprintf(fichierPretraite,"%c",'S');
 						fprintf(fichierPretraite,"%c",c);
 						fprintf(fichierPretraite,"%c",c);
 						i=i-132;
@@ -25,12 +21,11 @@ void ecriture(int i,FILE* fichierPretraite,int courant)
 				if(i>257)
 					{
 						fprintf(fichierPretraite,"%d",255);
-						fprintf(fichierPretraite,"%c",'S');
-						fprintf(fichierPretraite,"%c",'S');
 						fprintf(fichierPretraite,"%c",c);
 						fprintf(fichierPretraite,"%c",c);
 						i=i-255;
 					}
+				char d = (char) 134;
   			}	
 return ;
 }
@@ -80,17 +75,9 @@ char c;
 								if(i==0)
 									{
 										fprintf(fichierPretraite,"%d",0);
-										fprintf(fichierPretraite,"%c",'S');
-										fprintf(fichierPretraite,"%c",'S');
 									}
 								ecriture(i,fichierPretraite,courant);
-								
 								i=0;
-							}
-							else
-							{
-								fprintf(fichierPretraite,"%c",'S');
-								fprintf(fichierPretraite,"%c",'S');
 							}
 						courant=suivant;
 				}

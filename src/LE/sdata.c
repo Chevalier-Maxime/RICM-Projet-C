@@ -53,7 +53,7 @@ int estFeuilleE(ArbreEntier * arbre)
 	return 0;
 }
 
-int estFeuilleS(ArbreSymbole * arbre)
+int estFeuilleS(ArbreSymbole* arbre)
 {
 	if((arbre->filsDroit==NULL)&&(arbre->filsGauche==NULL)) return 1;
 	return 0;
@@ -76,8 +76,26 @@ ArbreEntier * ajouterNoeudParent(ArbreEntier * fils, char direction)
 }
 
 ArbreSymbole * creerArbreSymboleVide(char valeur)
-{
+{	
 	ArbreSymbole * a = malloc(sizeof(ArbreSymbole));
 	a->valeur = valeur;
+	a->filsDroit = NULL;
+	a->filsGauche = NULL;
 	return a;
+}
+
+ArbreSymbole * insererfils(ArbreSymbole * arbre,ArbreSymbole * g,ArbreSymbole * d)
+{
+	arbre->filsDroit=d;
+	arbre->filsGauche=g;
+	return arbre;
+}
+
+entete * creerEntete(int nbSymb, int* tabI, char* tabS)
+{
+	entete * res = malloc(sizeof(entete));
+	res->nbSymboles=nbSymb;
+	res->tabI=tabI;
+	res->tabS=tabS;
+	return res;
 }

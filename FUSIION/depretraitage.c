@@ -20,7 +20,7 @@ void depretraiter( FILE* fichier, FILE* fichierDepretraite)
 
 	while (res)
 	{
-		if (octetCourant == octetPrecedent) //On a deux fois le meme symbole d'affilée
+		if (octetCourant == octetPrecedent) //On a deux fois le meme symbole d'affilï¿½e
 		{
 			fwrite(&octetCourant, sizeof(unsigned char), 1, fichierDepretraite);
 			//Le caractere suivant est un nombre de repetition
