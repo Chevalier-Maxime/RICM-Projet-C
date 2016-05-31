@@ -4,6 +4,8 @@
 #include "entete.h"
 #include "desentetage.h"
 #include "sdata.h"
+#include "pretraitement.h"
+#include "depretraitage.h"
 #include <stdio.h>
 #include <stdlib.h>
 // Manque les include des pretraitements
@@ -53,9 +55,12 @@ void main()
 		//Ouverture du fichierACompresser
 		lireFichier(d);
 		//Pretraitement ...
-
+		fichierTemporaire = fopen(NOM_FICHIER_TEMP, "w+b");
+		pretraiter(fichierACompresser, fichierTemporaire);
+		fclose(fichierACompresser);
 		//Rempli la structure d a partir du fichier. ----> Si pretraitement mettre fichier temporaire ici
-		remplirDonneeFichierASCII(d, fichierACompresser);
+		rewind(fichierTemporaire);
+		remplirDonneeFichierASCII(d, fichierTemporaire);
 
 		ArbreEntier * a = Compression(*d, tableauHuffman);
 		//print_Abr(a, 0);
@@ -71,11 +76,14 @@ void main()
 		}
 
 		fichierCompresse = fopen(nomFichierCompresser, "w+b");
-		rewind(fichierACompresser);
+		rewind(fichierTemporaire);
 		//On ecrit l'entete dans le fichier Compressé
 		ecrireentete(e, fichierCompresse);
 		//Puis on réalise la compression
-		realiserCompressionASCII(a, d, e, fichierACompresser, fichierCompresse);
+		realiserCompressionASCII(a, d, e, fichierTemporaire, fichierCompresse);
+
+		fclose(fichierTemporaire);
+		fclose(fichierCompresse);
 
 		printf("La compression est terminée.\n"); exit(0);
 
@@ -98,7 +106,7 @@ void main()
 
 		printf("Sous quel nom decompresser votre fichier ? ");
 		scanf("%s", &nomFichierDecompresser);
-		fichierDecompresse = fopen(nomFichierDecompresser, "w+b"); // ----Si depretraitement changer ici en fichier temp et dans la suite aussi
+		fichierTemporaire = fopen(NOM_FICHIER_TEMP, "w+b"); // ----Si depretraitement changer ici en fichier temp et dans la suite aussi
 
 
 		//Desenteter
@@ -108,14 +116,18 @@ void main()
 		ArbreSymbole * arbreCanonique = Decompression(e->Symbole, e->TailleS, e->nbSymbolesDifferents);
 		//print_Abr(arbreCanonique, 0);
 
-		realiserDecompressionASCII(arbreCanonique, e, fichierCompresse, fichierDecompresse);
+		realiserDecompressionASCII(arbreCanonique, e, fichierCompresse, fichierTemporaire);
+		fclose(fichierCompresse);
+		
+		//faire depretraitement
+		fclose(fichierTemporaire);
+		fichierTemporaire = fopen(NOM_FICHIER_TEMP, "r+b");
+		fichierDecompresse = fopen(nomFichierDecompresser, "w+b");
+
+		depretraiter(fichierTemporaire, fichierDecompresse);
 
 		fclose(fichierDecompresse);
-		fclose(fichierCompresse);
-
+		fclose(fichierTemporaire);
 		printf("Decompression terminée :)\n");
-		//faire depretraitement
-		// ...
-
 	}
 }
