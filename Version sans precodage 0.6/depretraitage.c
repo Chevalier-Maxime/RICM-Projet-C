@@ -4,41 +4,9 @@
 #include "pretraitement.h"
 
 void depretraiter( FILE* fichier, FILE* fichierDepretraite)
+
 {
-
-	unsigned char octetCourant;
-	unsigned char octetPrecedent;
-	unsigned char nbRepetition;
-	int res;
-	int i;
-
-	//#TODO Test pour tres petit fichier
-	fread(&octetPrecedent, sizeof(unsigned char), 1, fichier);
-	fwrite(&octetPrecedent, sizeof(unsigned char), 1, fichierDepretraite);
-	res = fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-	fwrite(&octetCourant, sizeof(unsigned char), 1, fichierDepretraite);
-
-	while (res)
-	{
-		if (octetCourant == octetPrecedent) //On a deux fois le meme symbole d'affil�e
-		{
-			//Le caractere suivant est un nombre de repetition
-			fread(&nbRepetition, sizeof(unsigned char), 1, fichier);
-			for ( i = 0; i < nbRepetition; i++)
-			{
-				//On recopie
-				fwrite(&octetCourant, sizeof(unsigned char), 1, fichierDepretraite);
-			}
-			//fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-		}
-		octetPrecedent = octetCourant;
-		res = fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-		fwrite(&octetCourant, sizeof(unsigned char), 1, fichierDepretraite);
-	}
-
-
-
-/*int courant=0,precedent=0,k;
+int courant=0,precedent=0,k;
 
 char c;
 
@@ -111,7 +79,7 @@ char c;
 				}
     }
 else printf("Fichier vide");
-    return ;*/
+    return ;
 }
 
 

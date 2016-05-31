@@ -11,7 +11,7 @@ entete * decrypterentete(FILE* fichier)
 	
 	fread(identifiant, sizeof(char), 4, fichier);
 	if (!strcmp(identifiant, "1815")) {
-		printf("fichier non compilï¿½ par nos soins !\n"); exit(0);
+		printf("fichier non compilé par nos soins !\n"); exit(0);
 	}
 	
 	fread(&nbSymb, sizeof(int), 1, fichier); //On lit le nombre de symboles

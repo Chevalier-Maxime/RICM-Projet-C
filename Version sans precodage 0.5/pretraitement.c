@@ -55,39 +55,10 @@ int sontIdentique(int courant, int suivant)
 
 void pretraiter( FILE* fichier, FILE* fichierPretraite)
 {
-	unsigned char octetCourant ;
-	unsigned char octetPrecedent;
-	unsigned char nbRepetition;
-	int res;
+int courant=0,suivant=0, i=0;
+char c;
 
-	//#TODO Test pour tres petit fichier
-	fread(&octetPrecedent, sizeof(unsigned char), 1, fichier);
-	fwrite(&octetPrecedent, sizeof(unsigned char), 1, fichierPretraite);
-	res = fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-	fwrite(&octetCourant, sizeof(unsigned char), 1, fichierPretraite);
-
-	while (res)
-	{
-		if (octetCourant == octetPrecedent) //On a deux fois le meme symbole d'affil�e
-		{
-			nbRepetition = 0;
-			fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-			while (octetCourant==octetPrecedent && nbRepetition<256 && res)
-			{
-				nbRepetition++;
-				res = fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-			}
-			fwrite(&nbRepetition, sizeof(unsigned char), 1, fichierPretraite);
-		}
-		octetPrecedent = octetCourant;
-		res = fread(&octetCourant, sizeof(unsigned char), 1, fichier);
-		fwrite(&octetCourant, sizeof(unsigned char), 1, fichierPretraite);
-	}
-
-	/*int courant=0,suivant=0, i=0;
-	char c;
-
-	if (fichier != NULL)
+ if (fichier != NULL)
     {
 			courant = fgetc(fichier);
 
@@ -125,7 +96,7 @@ void pretraiter( FILE* fichier, FILE* fichierPretraite)
 				}
     }
 else printf("Fichier vide");
-    return ;*/
+    return ;
 }
 
 
